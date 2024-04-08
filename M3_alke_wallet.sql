@@ -56,7 +56,7 @@ VALUES
 -- Poblar tabla moneda
 INSERT INTO moneda 
 VALUES 
-(1, 'Dólar', '$'),(2, 'Euro', '€'),(3, 'Libra esterlina', '£'),(4, 'Yen', '¥'),(5, 'Peso', 'MXN');
+(1, 'Dólar', 'USD'),(2, 'Euro', 'EUR'),(3, 'Libra esterlina', 'GBP'),(4, 'Yen', 'JPY'),(5, 'Peso', 'MXN');
 
 -- Poblar tabla transaccion
 SET @id_transaccion := 1;
@@ -95,9 +95,34 @@ CALL PopulateTransactions();
 
 -- Querys solicitadas
 
--- 1. 
+-- 1. obtener el nombre de la moneda elegida por un usuario específico
+SELECT 
+    m.moneda_nombre AS nombre
+FROM
+    usuario AS u
+        LEFT JOIN
+    transaccion AS t ON u.id_usuario = t.id_usuario_emisor
+        LEFT JOIN
+    moneda AS m ON t.id_moneda = m.id_moneda
+WHERE
+    u.id_usuario = 1
 
--- SELECT * FROM usuario;
--- SELECT * FROM moneda;
+-- 2. Obtener todas las transacciones registradas
 SELECT * FROM transaccion;
 
+-- 3. Obtener todas las transacciones realizadas por un usuario específico
+SELECT * FROM transaccion AS t 
+WHERE id_usuario_emisor = 4;
+
+-- 4. Modificar el campo correo electrónico de un usuario específico
+UPDATE usuario
+SET correo_electronico = 'nuevo_correo@example.com'
+WHERE id_usuario = 8;
+
+SELECT * FROM usuario WHERE id_usuario = 8;
+
+-- 5. Eliminar los datos de una transacción
+DELETE FROM transaccion
+WHERE id_transaccion = 4;
+
+SELECT * FROM transaccion LIMIT 5;
